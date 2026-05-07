@@ -1,0 +1,38 @@
+|Hello_World
+CLOCK_50 => v_count[0].CLK
+CLOCK_50 => v_count[1].CLK
+CLOCK_50 => v_count[2].CLK
+CLOCK_50 => v_count[3].CLK
+CLOCK_50 => v_count[4].CLK
+CLOCK_50 => v_count[5].CLK
+CLOCK_50 => v_count[6].CLK
+CLOCK_50 => v_count[7].CLK
+CLOCK_50 => v_count[8].CLK
+CLOCK_50 => v_count[9].CLK
+CLOCK_50 => h_count[0].CLK
+CLOCK_50 => h_count[1].CLK
+CLOCK_50 => h_count[2].CLK
+CLOCK_50 => h_count[3].CLK
+CLOCK_50 => h_count[4].CLK
+CLOCK_50 => h_count[5].CLK
+CLOCK_50 => h_count[6].CLK
+CLOCK_50 => h_count[7].CLK
+CLOCK_50 => h_count[8].CLK
+CLOCK_50 => h_count[9].CLK
+CLOCK_50 => pixel_tick.CLK
+VGA_HS <= VGA_HS.DB_MAX_OUTPUT_PORT_TYPE
+VGA_VS <= VGA_VS.DB_MAX_OUTPUT_PORT_TYPE
+VGA_R[0] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_R[1] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_R[2] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_R[3] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_G[0] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_G[1] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_G[2] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_G[3] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_B[0] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_B[1] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_B[2] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+VGA_B[3] <= process_2.DB_MAX_OUTPUT_PORT_TYPE
+
+
