@@ -6,6 +6,7 @@ entity Pipes is
     port (
         clk        : in  std_logic;
         reset      : in  std_logic;
+        game_enable : in  std_logic;  -- Only spawn/move pipes when enabled
         frame_tick : in  std_logic;  -- Pulse at 60Hz for frame updates
         pipe_data  : out std_logic_vector(59 downto 0);  -- 20 bits per pipe (10 x + 10 gap_y) x 3 pipes
         num_pipes  : out integer range 0 to 3
@@ -61,14 +62,14 @@ begin
         variable new_gap_y : integer;
     begin
         if rising_edge(clk) then
-            if reset = '1' then
+            if reset = '1' or game_enable = '0' then
                 spawn_counter <= 0;
                 spawn_index <= 0;
                 for i in 0 to 2 loop
                     pipe_array(i).x <= -1;  -- Mark as inactive
                     pipe_array(i).gap_y <= 0;
                 end loop;
-            elsif frame_tick = '1' then
+            elsif game_enable = '1' and frame_tick = '1' then
                 -- Move all pipes left by 1 pixel
                 for i in 0 to 2 loop
                     if pipe_array(i).x > REMOVE_X and pipe_array(i).x /= -1 then

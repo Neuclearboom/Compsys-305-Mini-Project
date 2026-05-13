@@ -40,8 +40,12 @@ architecture rtl of flappy_bird_step2_top is
  signal bird_g     : std_logic_vector(3 downto 0);
  signal bird_b     : std_logic_vector(3 downto 0);
 
- signal pipe_data  : std_logic_vector(59 downto 0);
- signal num_pipes  : integer range 0 to 3;
+ signal pipe_data   : std_logic_vector(59 downto 0);
+ signal num_pipes   : integer range 0 to 3;
+ signal pipe_on     : std_logic;
+ signal pipe_r      : std_logic_vector(3 downto 0);
+ signal pipe_g      : std_logic_vector(3 downto 0);
+ signal pipe_b      : std_logic_vector(3 downto 0);
 
 begin
 
@@ -118,7 +122,45 @@ begin
      bird_b  => bird_b
    );
 
- process (display_on, pixel_y, bird_on, bird_dead, bird_r, bird_g, bird_b)
+ pipes_unit: entity work.Pipes
+   port map (
+     clk        => pixel_clk,
+     reset      => reset,
+     game_enable => game_enable,
+     frame_tick => frame_tick,
+     pipe_data  => pipe_data,
+     num_pipes  => num_pipes
+   );
+
+ process (pixel_x, pixel_y, pipe_data)
+   variable px    : integer;
+   variable py    : integer;
+   variable px_pipe : integer;
+   variable gap_y : integer;
+ begin
+   px := to_integer(pixel_x);
+   py := to_integer(pixel_y);
+   pipe_on <= '0';
+   pipe_r  <= "0000";
+   pipe_g  <= "0000";
+   pipe_b  <= "0000";
+
+   for i in 0 to 2 loop
+     px_pipe := to_integer(unsigned(pipe_data(20*i + 19 downto 20*i + 10))) - 100;
+     gap_y   := to_integer(unsigned(pipe_data(20*i + 9 downto 20*i)));
+
+     if px_pipe >= 0 and px_pipe < 640 and px >= px_pipe and px < px_pipe + 50 then
+       if not (py >= gap_y and py < gap_y + 100) then
+         pipe_on <= '1';
+         pipe_r  <= "1111";
+         pipe_g  <= "0100";
+         pipe_b  <= "0000";
+       end if;
+     end if;
+   end loop;
+ end process;
+
+ process (display_on, pixel_y, bird_on, bird_dead, bird_r, bird_g, bird_b, pipe_on, pipe_r, pipe_g, pipe_b)
  begin
    if display_on = '0' then
      VGA_R <= "0000";
@@ -137,6 +179,11 @@ begin
        VGA_G <= bird_g;
        VGA_B <= bird_b;
      end if;
+
+   elsif pipe_on = '1' then
+     VGA_R <= pipe_r;
+     VGA_G <= pipe_g;
+     VGA_B <= pipe_b;
 
    elsif to_integer(pixel_y) >= 462 then
      -- Ground area

@@ -63,10 +63,17 @@ begin
 
    elsif rising_edge(clk) then
 
-     -- Only update the bird once per frame.
-     if frame_tick = '1' then
+     -- Return bird to start when game is disabled.
+     if game_enable = '0' then
+       x_pos <= INIT_X;
+       y_pos <= INIT_Y;
+       y_vel <= 0;
+       alive <= '1';
 
-       if game_enable = '1' and pause = '0' and alive = '1' then
+     -- Only update the bird once per frame when game is enabled.
+     elsif frame_tick = '1' then
+
+       if pause = '0' and alive = '1' then
 
          if hit_obstacle = '1' then
            alive <= '0';
