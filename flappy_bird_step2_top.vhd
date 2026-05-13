@@ -47,6 +47,9 @@ architecture rtl of flappy_bird_step2_top is
  signal pipe_g      : std_logic_vector(3 downto 0);
  signal pipe_b      : std_logic_vector(3 downto 0);
 
+ signal text_on : std_logic;
+ signal font_bit : std_logic;
+
 begin
 
  -- DE0-CV KEY buttons are active-low.
@@ -160,12 +163,17 @@ begin
    end loop;
  end process;
 
- process (display_on, pixel_y, bird_on, bird_dead, bird_r, bird_g, bird_b, pipe_on, pipe_r, pipe_g, pipe_b)
+ process (display_on, text_on, pixel_y, bird_on, bird_dead, bird_r, bird_g, bird_b, pipe_on, pipe_r, pipe_g, pipe_b)
  begin
    if display_on = '0' then
      VGA_R <= "0000";
      VGA_G <= "0000";
      VGA_B <= "0000";
+
+   elsif text_on = '1'
+     VGA_R <= "1111";
+     VGA_G <= "1111";
+     VGA_B <= "1111";
 
    elsif bird_on = '1' then
 
@@ -196,6 +204,32 @@ begin
      VGA_R <= "0010";
      VGA_G <= "0111";
      VGA_B <= "1111";
+   end if;
+ end process;
+
+ process (pixel_x, pixel_y, SW)
+   variable px, py : integer;
+   variable char_x, char_y : integer;
+   variable scale : integer;
+ begin
+   px := to_integer(pixel_x);
+   py := to_integer(pixel_y);
+
+   case SW(2 downto 1) is
+        when "01" => scale := 2;
+        when "10" => scale := 4;
+        when others => scale := 1;
+   end case;
+
+   text_on <= '0';
+    
+   if px >= 50 and px < 50 + (8 * scale) and
+      py >= 50 and py < 50 + (16 * scale) then
+        
+        char_x := (px - 50) / scale;
+        char_y := (py - 50) / scale;
+        
+        text_on <= '1'; 
    end if;
  end process;
 
