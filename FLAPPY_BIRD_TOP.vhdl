@@ -40,42 +40,7 @@ architecture structural of FLAPPY_BIRD_TOP is
 
 begin
     -- Assign mode selection from DIP switch 0
-    current_mode <= SW(0); [cite: 37]
+    current_mode <= SW(0);
 
-    -- PS/2 Mouse Controller (act as component)
-    -- Responsible for capturing movement and click data for bird flapping [cite: 17, 111]
-    u_mouse : entity work.mouse_controller
-        port map (
-            clk      => CLOCK_50,
-            ps2_clk  => PS2_CLK,
-            ps2_dat  => PS2_DAT,
-            left_en  => left_click,
-            mouse_x  => mouse_x
-        );
-
-    -- Game Logic / Finite State Machine (FSM)
-    -- Manages game states (Start, Play, Pause, Dead) and object movement
-    u_game_logic : entity work.game_engine
-        port map (
-            clk          => CLOCK_50,
-            reset        => not RESET_N,
-            mode_select  => current_mode,
-            jump_trigger => left_click,
-            pause        => not KEY(2),
-            pixel_rgb    => game_pixel_rgb
-        );
-
-    -- VGA Driver
-    -- Generates HSYNC/VSYNC pulses and outputs pixel data to the monitor
-    u_vga : entity work.vga_controller
-        port map (
-            clk_50   => CLOCK_50,
-            pixel_in => game_pixel_rgb,
-            vga_hs   => VGA_HS,
-            vga_vs   => VGA_VS,
-            vga_r    => VGA_R,
-            vga_g    => VGA_G,
-            vga_b    => VGA_B
-        );
 
 end architecture structural;
