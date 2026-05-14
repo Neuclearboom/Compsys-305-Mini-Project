@@ -215,7 +215,7 @@ begin
    px := to_integer(pixel_x);
    py := to_integer(pixel_y);
 
-   case SW(2 downto 1) is
+   case SW(4 downto 3) is
         when "01" => scale := 2;
         when "10" => scale := 4;
         when others => scale := 1;
